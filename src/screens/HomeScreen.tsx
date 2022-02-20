@@ -37,7 +37,8 @@ export const HomeScreen = ({navigation}: any) => {
       <Button
         mode="text"
         icon="plus-circle"
-        onPress={() => navigation.navigate('client-add', {setGetApiData})}>
+        // onPress={() => navigation.navigate('client-add', {setGetApiData})}
+        onPress={() => navigation.navigate('client-add', {...setGetApiData})}>
         Nuevo Cliente
       </Button>
       <Headline style={globalStyles.h1}>
@@ -52,7 +53,6 @@ export const HomeScreen = ({navigation}: any) => {
             title={item.name}
             onPress={() => {
               navigation.navigate('client-details', {item});
-              navigation.setOptions({setGetApiData});
             }}
             description={item.company}
           />
@@ -63,7 +63,7 @@ export const HomeScreen = ({navigation}: any) => {
         style={styles.fab}
         color="#fff"
         onPress={() => {
-          navigation.navigate('client-add', {setGetApiData});
+          navigation.navigate('client-add', {...setGetApiData});
         }}
       />
     </View>

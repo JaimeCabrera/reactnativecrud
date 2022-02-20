@@ -19,7 +19,6 @@ export const ClientDetailsScreen = ({navigation, route}: any) => {
     );
   };
   const deleteClient = async () => {
-    console.log('eliminado', id);
     try {
       const url = `http://10.0.2.2:3000/clientes/${id}`;
       await axios.delete(url);
