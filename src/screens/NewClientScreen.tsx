@@ -21,7 +21,6 @@ interface InterfaceParams {
 
 export const NewClientScreen = ({navigation, route}: Props) => {
   const {setGetApiData} = route.params;
-  console.log('parametros', route);
   const {colors} = useTheme();
   // state to form
   const [name, setName] = useState('');
@@ -67,7 +66,6 @@ export const NewClientScreen = ({navigation, route}: Props) => {
     // si estamos editandoel client
     if (route.params.client) {
       const {id} = route.params.client;
-      console.log('el id de editar', id);
       client.id = id;
       const url = `http://10.0.2.2:3000/clientes/${id}`;
       try {

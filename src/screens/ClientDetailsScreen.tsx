@@ -8,7 +8,6 @@ import {Props} from './NewClientScreen';
 export const ClientDetailsScreen = ({navigation, route}: Props) => {
   const {id, name, telephone, email, company} = route.params.client;
   const {setGetApiData} = route.params;
-  console.log('estos son los parametros', route);
   // show alert to dlete client details
   const showDeleteConfirmation = () => {
     Alert.alert(
