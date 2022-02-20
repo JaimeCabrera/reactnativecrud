@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, View} from 'react-native';
 import {Button, Divider, FAB, Headline, List} from 'react-native-paper';
 import globalStyles from '../styles/global';
 
@@ -20,9 +20,8 @@ export const HomeScreen = ({navigation}: any) => {
     const getClients = async () => {
       try {
         const res = await axios.get('http://10.0.2.2:3000/clientes');
-        setClients(res.data);
+        await setClients(res.data);
         setGetApiData(false);
-        console.log('consulta');
       } catch (error) {
         console.log(error);
       }
@@ -38,7 +37,11 @@ export const HomeScreen = ({navigation}: any) => {
         mode="text"
         icon="plus-circle"
         // onPress={() => navigation.navigate('client-add', {setGetApiData})}
-        onPress={() => navigation.navigate('client-add', {...setGetApiData})}>
+        onPress={() =>
+          navigation.navigate('client-add', {
+            setGetApiData,
+          })
+        }>
         Nuevo Cliente
       </Button>
       <Headline style={globalStyles.h1}>
@@ -52,7 +55,10 @@ export const HomeScreen = ({navigation}: any) => {
           <List.Item
             title={item.name}
             onPress={() => {
-              navigation.navigate('client-details', {item});
+              navigation.navigate('client-details', {
+                client: item,
+                setGetApiData,
+              });
             }}
             description={item.company}
           />
@@ -60,22 +66,12 @@ export const HomeScreen = ({navigation}: any) => {
       />
       <FAB
         icon="plus"
-        style={styles.fab}
+        style={globalStyles.fab}
         color="#fff"
         onPress={() => {
-          navigation.navigate('client-add', {...setGetApiData});
+          navigation.navigate('client-add', {setGetApiData});
         }}
       />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  fab: {
-    position: 'absolute',
-    margin: 20,
-    right: 0,
-    bottom: 20,
-    backgroundColor: '#3498DB',
-  },
-});

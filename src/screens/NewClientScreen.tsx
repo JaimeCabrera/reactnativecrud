@@ -1,13 +1,27 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Button, Divider, TextInput, useTheme} from 'react-native-paper';
 import axios from 'axios';
 import globalStyles from '../styles/global';
 import {AlertDialog} from '../components/AlertDialog';
+import {InterfaceClients} from './HomeScreen';
 
-export const NewClientScreen = ({navigation, route}: any) => {
+export interface Props {
+  navigation: any;
+  route: InterfaceRoute;
+}
+
+interface InterfaceRoute {
+  params: InterfaceParams;
+}
+interface InterfaceParams {
+  client: InterfaceClients;
+  setGetApiData: (value: boolean) => void;
+}
+
+export const NewClientScreen = ({navigation, route}: Props) => {
   const {setGetApiData} = route.params;
-
+  console.log('parametros', route);
   const {colors} = useTheme();
   // state to form
   const [name, setName] = useState('');
@@ -17,6 +31,24 @@ export const NewClientScreen = ({navigation, route}: any) => {
   // state to dialog
   const [showDialog, setShowDialog] = useState(false);
   // HOOK DE NAVIAGTION
+
+  // detectar si estamos editando o no
+  useEffect(() => {
+    if (route.params.client) {
+      // obteniendo los datos del client desde los parametros
+      const {
+        name: nameEdit,
+        telephone: telephoneEdit,
+        email: emailEdit,
+        company: companyEdit,
+      } = route.params.client;
+      setName(nameEdit);
+      setTelephone(telephoneEdit);
+      setEmail(emailEdit);
+      setCompany(companyEdit);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // save client in database
   const saveClient = async () => {
@@ -31,21 +63,39 @@ export const NewClientScreen = ({navigation, route}: any) => {
       return;
     }
     // create a client
-    const client = {name, telephone, email, company};
-    // save data to database
-    try {
-      await axios.post('http://10.0.2.2:3000/clientes', client);
-    } catch (error) {
-      console.log(error);
+    const client = {id: '', name, telephone, email, company};
+    // si estamos editandoel client
+    if (route.params.client) {
+      const {id} = route.params.client;
+      console.log('el id de editar', id);
+      client.id = id;
+      const url = `http://10.0.2.2:3000/clientes/${id}`;
+      try {
+        await axios.put(url, client);
+        setGetApiData(true);
+        navigation.navigate('home');
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      // guardar el cliente en la api
+      try {
+        await axios.post('http://10.0.2.2:3000/clientes', client);
+        setGetApiData(true);
+        navigation.navigate('home');
+        // redireccionar
+        // navigation.navigate('home');
+        // setGetApiData(true);
+      } catch (error) {
+        console.log(error);
+      }
     }
-    navigation.navigate('home');
+
     // limpinado los campos del form de
     setName('');
     setTelephone('');
     setEmail('');
     setCompany('');
-    // cambiar a tru a para traer el Nuevo
-    setGetApiData(true);
   };
   return (
     <View style={globalStyles.container}>

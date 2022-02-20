@@ -1,12 +1,14 @@
 import axios from 'axios';
 import React from 'react';
 import {Alert, StyleSheet, View} from 'react-native';
-import {Button, Headline, Subheading, Text} from 'react-native-paper';
+import {Button, FAB, Headline, Subheading, Text} from 'react-native-paper';
 import globalStyles from '../styles/global';
+import {Props} from './NewClientScreen';
 
-export const ClientDetailsScreen = ({navigation, route}: any) => {
-  const {id, name, telephone, email, company} = route.params.item;
+export const ClientDetailsScreen = ({navigation, route}: Props) => {
+  const {id, name, telephone, email, company} = route.params.client;
   const {setGetApiData} = route.params;
+  console.log('estos son los parametros', route);
   // show alert to dlete client details
   const showDeleteConfirmation = () => {
     Alert.alert(
@@ -50,6 +52,17 @@ export const ClientDetailsScreen = ({navigation, route}: any) => {
         onPress={() => showDeleteConfirmation()}>
         Eliminar cliente
       </Button>
+      <FAB
+        icon="pencil"
+        style={globalStyles.fab}
+        color="#fff"
+        onPress={() => {
+          navigation.navigate('client-add', {
+            client: route.params.client,
+            setGetApiData,
+          });
+        }}
+      />
     </View>
   );
 };

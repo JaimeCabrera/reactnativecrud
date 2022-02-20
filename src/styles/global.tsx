@@ -14,6 +14,13 @@ const globalStyles = StyleSheet.create({
     marginTop: 4,
     backgroundColor: '#AEB6BF',
   },
+  fab: {
+    position: 'absolute',
+    margin: 20,
+    right: 0,
+    bottom: 20,
+    backgroundColor: '#3498DB',
+  },
 });
 
 export default globalStyles;
